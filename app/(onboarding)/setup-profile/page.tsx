@@ -19,11 +19,16 @@ export default function SetupProfilePage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In actual implementation, we would send this data to IPC:
-    // window.electronAPI.createProfile(formData)
-    router.push('/dashboard');
+    try {
+      if (typeof window !== 'undefined' && window.electronAPI) {
+        await window.electronAPI.createProfile(formData);
+      }
+      router.push('/dashboard');
+    } catch (err) {
+      console.error('Failed to create profile:', err);
+    }
   };
 
   return (
