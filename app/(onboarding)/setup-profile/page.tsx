@@ -23,7 +23,7 @@ export default function SetupProfilePage() {
     e.preventDefault();
     // In actual implementation, we would send this data to IPC:
     // window.electronAPI.createProfile(formData)
-    router.push('/system-check');
+    router.push('/dashboard');
   };
 
   return (
@@ -116,8 +116,8 @@ export default function SetupProfilePage() {
           </div>
 
           <div className="pt-4">
-            <Button type="submit" variant="glow" className="w-full">
-              Continue to System Check
+            <Button type="submit" variant="glow" className="w-full cursor-pointer">
+              Complete Setup
             </Button>
           </div>
         </form>
