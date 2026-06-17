@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '../../../components/ui/Button';
 
 /* ── Hardcoded material data ── */
@@ -63,9 +63,12 @@ const STATS = [
   { label: 'Size', value: MATERIAL.size, icon: '💾' },
 ];
 
-export default function MaterialDetailPage() {
+import { Suspense } from 'react';
+
+function MaterialDetailContent() {
   const router = useRouter();
-  const params = useParams();
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
   const [summaryExpanded, setSummaryExpanded] = useState(true);
   const [showAllChunks, setShowAllChunks] = useState(false);
 
@@ -209,7 +212,7 @@ export default function MaterialDetailPage() {
 
             <div className="space-y-3">
               <button
-                onClick={() => router.push(`/materials/${params.id}/quiz`)}
+                onClick={() => router.push(`/materials/detail/quiz?id=${id}`)}
                 className="w-full glass rounded-xl p-4 text-left hover:border-indigo-500/40 hover:shadow-[0_0_20px_rgba(99,102,241,0.1)] transition-all group"
               >
                 <div className="flex items-center gap-3">
@@ -222,7 +225,7 @@ export default function MaterialDetailPage() {
               </button>
 
               <button
-                onClick={() => router.push(`/materials/${params.id}/flashcards`)}
+                onClick={() => router.push(`/materials/detail/flashcards?id=${id}`)}
                 className="w-full glass rounded-xl p-4 text-left hover:border-teal-500/40 hover:shadow-[0_0_20px_rgba(45,212,191,0.1)] transition-all group"
               >
                 <div className="flex items-center gap-3">
@@ -286,5 +289,13 @@ export default function MaterialDetailPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function MaterialDetailPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-slate-400">Loading material details...</div>}>
+      <MaterialDetailContent />
+    </Suspense>
   );
 }

@@ -247,8 +247,8 @@ export default function UploadPage() {
           {/* ── Done actions ── */}
           {pipelineDone && (
             <div className="flex gap-4 mt-8 justify-center animate-slide-up">
-              <Button variant="primary" onClick={() => router.push('/materials/mat-1')}>
-                View Material
+              <Button variant="primary" onClick={() => router.push('/materials/detail?id=mat-1')}>
+                View Material →
               </Button>
               <Button variant="secondary" onClick={() => router.push('/materials')}>
                 Back to Library

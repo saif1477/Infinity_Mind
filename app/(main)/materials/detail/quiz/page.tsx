@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '../../../../components/ui/Button';
 
 /* ── Hardcoded quiz data ── */
@@ -80,9 +80,12 @@ const QUESTIONS = [
   },
 ];
 
-export default function QuizPage() {
+import { Suspense } from 'react';
+
+function QuizContent() {
   const router = useRouter();
-  const params = useParams();
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
   const [currentQ, setCurrentQ] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
@@ -137,7 +140,7 @@ export default function QuizPage() {
     return (
       <div className="max-w-2xl mx-auto animate-fade-in">
         <button
-          onClick={() => router.push(`/materials/${params.id}`)}
+          onClick={() => router.push(`/materials/detail?id=${id}`)}
           className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-6 group"
         >
           <span className="group-hover:-translate-x-1 transition-transform">←</span>
@@ -220,7 +223,7 @@ export default function QuizPage() {
             <Button variant="primary" onClick={handleRetake}>
               🔄 Retake Quiz
             </Button>
-            <Button variant="secondary" onClick={() => router.push(`/materials/${params.id}`)}>
+            <Button variant="secondary" onClick={() => router.push(`/materials/detail?id=${id}`)}>
               Back to Material
             </Button>
           </div>
@@ -234,7 +237,7 @@ export default function QuizPage() {
     <div className="max-w-2xl mx-auto animate-fade-in">
       {/* ── Back ── */}
       <button
-        onClick={() => router.push(`/materials/${params.id}`)}
+        onClick={() => router.push(`/materials/detail?id=${id}`)}
         className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-6 group"
       >
         <span className="group-hover:-translate-x-1 transition-transform">←</span>
@@ -352,5 +355,13 @@ export default function QuizPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function QuizPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-slate-400">Loading quiz...</div>}>
+      <QuizContent />
+    </Suspense>
   );
 }
